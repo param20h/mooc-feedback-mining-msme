@@ -16,7 +16,7 @@ This project applies **Machine Learning (ML)** and **Natural Language Processing
 ## 🧩 Directory Structure
 
 ```
-feedback-mining-from-moocs/
+mooc-feedback-mining-msme/
 │
 ├── data/
 │   ├── raw/
@@ -59,8 +59,8 @@ feedback-mining-from-moocs/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/rkbalolkhan/feedback-mining-from-moocs.git
-cd feedback-mining-from-moocs
+git clone https://github.com/param20h/mooc-feedback-mining-msme.git
+cd mooc-feedback-mining-msme
 ```
 
 ### 2️⃣ (Optional) Create Virtual Environment
@@ -106,12 +106,11 @@ The goal is to extract meaningful **sentiment insights** from learner feedback t
 
 ## 👨‍💻 Author
 
-**Rahematullah Balolkhan**  
-B.Tech CSE — Lovely Professional University  
-Full Stack Developer | Machine Learning Enthusiast  
+**Param20h**  
+5th Semester — ML2 Project  
+Machine Learning & NLP Enthusiast  
 
-🌐 [LinkedIn](https://www.linkedin.com/in/rkbalolkhan/)  
-📸 [Instagram](https://www.instagram.com/rk.balolkhan)
+🌐 [GitHub](https://github.com/param20h)
 
 ---
 
