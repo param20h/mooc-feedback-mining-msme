@@ -91,6 +91,10 @@ class TextPreprocessor:
         """
         Complete preprocessing pipeline
         """
+        # Handle NaN/None values
+        if pd.isna(text) or text is None or str(text).strip() == '':
+            return ''
+        
         # Clean text
         cleaned = self.clean_text(text)
         
