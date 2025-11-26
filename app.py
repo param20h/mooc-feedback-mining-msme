@@ -66,17 +66,22 @@ page = st.sidebar.radio("Go to", ["Home", "Single Review Analysis", "Batch Analy
 def load_models():
     """Load trained models and preprocessing objects"""
     try:
+        # Use absolute paths for model loading
+        model_path = os.path.join(current_dir, 'models', 'optimized_best_model.pkl')
+        vectorizer_path = os.path.join(current_dir, 'models', 'tfidf_vectorizer.pkl')
+        
         # Try loading with joblib first (preferred for sklearn models)
-        model = joblib.load('models/optimized_best_model.pkl')
-        vectorizer = joblib.load('models/tfidf_vectorizer.pkl')
+        model = joblib.load(model_path)
+        vectorizer = joblib.load(vectorizer_path)
         
         if DataPreprocessor is not None:
             preprocessor = DataPreprocessor()
         else:
             preprocessor = None
         return model, vectorizer, preprocessor
-    except FileNotFoundError:
+    except FileNotFoundError as e:
         st.warning("⚠️ Models not found. Please train models first using the notebooks.")
+        st.info(f"Looking for models in: {os.path.join(current_dir, 'models')}")
         return None, None, None
     except Exception as e:
         st.error(f"⚠️ Error loading models: {str(e)}")
@@ -90,7 +95,8 @@ model, vectorizer, preprocessor = load_models()
 def load_data():
     """Load the dataset"""
     try:
-        df = pd.read_csv('data/raw/coursera_reviews.csv')
+        data_path = os.path.join(current_dir, 'data', 'raw', 'coursera_reviews.csv')
+        df = pd.read_csv(data_path)
         return df
     except FileNotFoundError:
         return None
