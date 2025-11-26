@@ -207,8 +207,15 @@ marimo/_lsp/
 __marimo__/
 
 data/processed/*
-models/*
-*.pkl
+# Allow essential model files for Streamlit Cloud deployment
+# models/*
+# *.pkl
 *.ipynb_checkpoints
+
+# Only ignore large BERT model directories
+models/bert_model/*
+models/bert_final/*
+!models/bert_model/.gitkeep
+!models/bert_final/.gitkeep
 
 

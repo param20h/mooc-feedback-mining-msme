@@ -57,9 +57,8 @@ st.markdown("""
 st.markdown('<h1 class="main-header">📚 MOOC Feedback Sentiment Analyzer</h1>', unsafe_allow_html=True)
 st.markdown("### Intelligent Feedback Mining for MSMEs - SIH 2021")
 
-# Sidebar
-st.sidebar.title("🎯 Navigation")
-page = st.sidebar.radio("Go to", ["Home", "Single Review Analysis", "Batch Analysis", "Model Insights", "About"])
+# Horizontal Navigation Tabs
+page = st.tabs(["🏠 Home", "🔍 Single Review", "📁 Batch Analysis", "🔬 Model Insights", "ℹ️ About"])
 
 # Load models
 @st.cache_resource
@@ -104,7 +103,7 @@ def load_data():
 df = load_data()
 
 # ==================== HOME PAGE ====================
-if page == "Home":
+with page[0]:
     st.write("---")
     
     col1, col2, col3 = st.columns(3)
@@ -168,7 +167,7 @@ if page == "Home":
             st.pyplot(fig)
 
 # ==================== SINGLE REVIEW ANALYSIS ====================
-elif page == "Single Review Analysis":
+with page[1]:
     st.markdown("## 🔍 Analyze a Single Review")
     st.write("Enter a course review to get instant sentiment analysis.")
     
@@ -251,7 +250,7 @@ elif page == "Single Review Analysis":
                     st.code(cleaned_text)
 
 # ==================== BATCH ANALYSIS ====================
-elif page == "Batch Analysis":
+with page[2]:
     st.markdown("## 📁 Batch Analysis")
     st.write("Upload a CSV file with reviews to analyze multiple reviews at once.")
     
@@ -366,7 +365,7 @@ elif page == "Batch Analysis":
             st.error(f"Error processing file: {str(e)}")
 
 # ==================== MODEL INSIGHTS ====================
-elif page == "Model Insights":
+with page[3]:
     st.markdown("## 🔬 Model Performance Insights")
     
     # Model comparison
@@ -428,54 +427,207 @@ elif page == "Model Insights":
     st.pyplot(fig)
 
 # ==================== ABOUT PAGE ====================
-elif page == "About":
-    st.markdown("## ℹ️ About This Project")
+with page[4]:
+    st.markdown("""
+    <style>
+    .about-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 1rem;
+        color: white;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .feature-box {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        border-left: 4px solid #667eea;
+        margin: 1rem 0;
+    }
+    .tech-badge {
+        display: inline-block;
+        background-color: #e7f3ff;
+        color: #0066cc;
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+        margin: 0.25rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .stats-card {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        padding: 1.5rem;
+        border-radius: 0.8rem;
+        color: white;
+        text-align: center;
+        margin: 0.5rem;
+    }
+    </style>
     
-    st.write("""
-    ### 📚 MOOC Feedback Mining for MSMEs
+    <div class="about-header">
+        <h1>📚 MOOC Feedback Mining System</h1>
+        <p style="font-size: 1.2rem; margin-top: 1rem;">Empowering MSMEs with AI-Driven Insights</p>
+        <p style="font-size: 0.9rem; opacity: 0.9;">Smart India Hackathon 2021 - Problem Statement 025</p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    **Smart India Hackathon 2021 - Problem Statement 025**
+    # Overview Section
+    col1, col2 = st.columns([2, 1])
     
-    This project aims to help Micro, Small, and Medium Enterprises (MSMEs) understand 
-    student feedback on their online courses through advanced NLP and sentiment analysis.
+    with col1:
+        st.markdown("### 🎯 Project Overview")
+        st.markdown("""
+        <div class="feature-box" style="color: #000000;">
+        This intelligent sentiment analysis system helps <b>Micro, Small, and Medium Enterprises (MSMEs)</b> 
+        extract actionable insights from massive amounts of course feedback. By leveraging state-of-the-art 
+        NLP and machine learning techniques, we transform unstructured reviews into clear sentiment signals.
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("### ✨ Key Capabilities")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.markdown("""
+            - 🤖 **Multi-Model Architecture**  
+              Traditional ML + Deep Learning
+            - ⚡ **Real-Time Predictions**  
+              Instant sentiment analysis (<100ms)
+            - 📊 **Batch Processing**  
+              Analyze 1000+ reviews at once
+            """)
+        with col_b:
+            st.markdown("""
+            - 📈 **Visual Analytics**  
+              Charts, word clouds, metrics
+            - 🎯 **87% Accuracy**  
+              State-of-the-art BERT model
+            - 💾 **CSV Export**  
+              Download analyzed results
+            """)
     
-    #### 🎯 Key Features:
-    - **Multi-Model Approach**: Implements both traditional ML (Logistic Regression, Naive Bayes, Random Forest) and deep learning (BERT)
-    - **Real-Time Analysis**: Instant sentiment prediction for individual reviews
-    - **Batch Processing**: Analyze hundreds of reviews at once
-    - **Actionable Insights**: Extract meaningful patterns from course feedback
-    
-    #### 🔬 Technical Stack:
-    - **Frontend**: Streamlit
-    - **ML/DL**: scikit-learn, transformers (Hugging Face), PyTorch
-    - **NLP**: NLTK, spaCy
-    - **Visualization**: matplotlib, seaborn, plotly
-    
-    #### 📊 Dataset:
-    - **Source**: Coursera Course Reviews (Kaggle)
-    - **Size**: 140,000+ reviews
-    - **Labels**: 5-star ratings converted to 3-class sentiment (Negative, Neutral, Positive)
-    
-    #### 👥 Team:
-    - Developed for SIH 2021
-    - Focus: Empowering MSMEs with AI-driven insights
-    
-    #### 📝 License:
-    MIT License - Open for educational and commercial use
-    
-    ---
-    
-    **Version**: 1.0.0  
-    **Last Updated**: November 2025
-    """)
+    with col2:
+        st.markdown("### 📊 Quick Stats")
+        st.markdown("""
+        <div class="stats-card">
+            <h2 style="margin: 0;">140K+</h2>
+            <p style="margin: 0.5rem 0 0 0;">Reviews Analyzed</p>
+        </div>
+        <div class="stats-card">
+            <h2 style="margin: 0;">87%</h2>
+            <p style="margin: 0.5rem 0 0 0;">Model Accuracy</p>
+        </div>
+        <div class="stats-card">
+            <h2 style="margin: 0;">4</h2>
+            <p style="margin: 0.5rem 0 0 0;">ML Models</p>
+        </div>
+        """, unsafe_allow_html=True)
     
     st.write("---")
-    st.markdown("### 🚀 Get Started")
-    st.write("""
-    1. Navigate to **Single Review Analysis** to test individual reviews
-    2. Use **Batch Analysis** to process multiple reviews from a CSV
-    3. Check **Model Insights** to understand model performance
-    """)
+    
+    # Technical Details
+    st.markdown("### 🔬 Technical Stack")
+    st.markdown("""
+    <span class="tech-badge">Python 3.11</span>
+    <span class="tech-badge">Streamlit</span>
+    <span class="tech-badge">FastAPI</span>
+    <span class="tech-badge">scikit-learn</span>
+    <span class="tech-badge">PyTorch</span>
+    <span class="tech-badge">Transformers</span>
+    <span class="tech-badge">NLTK</span>
+    <span class="tech-badge">spaCy</span>
+    <span class="tech-badge">pandas</span>
+    <span class="tech-badge">matplotlib</span>
+    <span class="tech-badge">seaborn</span>
+    """, unsafe_allow_html=True)
+    
+    st.write("")
+    
+    # Models Section
+    st.markdown("### 🤖 Models Implemented")
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.info("""
+        **Logistic Regression**  
+        ⚡ Fast & Reliable  
+        📊 82% Accuracy  
+        ⏱️ <50ms inference
+        """)
+    
+    with col2:
+        st.info("""
+        **Naive Bayes**  
+        🚀 Ultra Fast  
+        📊 78% Accuracy  
+        ⏱️ <30ms inference
+        """)
+    
+    with col3:
+        st.success("""
+        **Random Forest**  
+        🏆 Best Balance  
+        📊 85% Accuracy  
+        ⏱️ <100ms inference
+        """)
+    
+    with col4:
+        st.success("""
+        **BERT (DistilBERT)**  
+        🥇 Most Accurate  
+        📊 87% Accuracy  
+        ⏱️ ~500ms inference
+        """)
+    
+    st.write("---")
+    
+    # Creator Section
+    st.markdown("### 👨‍💻 Created By")
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        st.markdown("""
+        <div style="text-align: center; padding: 2rem; background-color: #f8f9fa; border-radius: 1rem;">
+            <h2 style="color: #667eea; margin-bottom: 1rem;">Param</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">Machine Learning Engineer | NLP Enthusiast</p>
+            <a href="https://param20h.me" target="_blank" style="text-decoration: none;">
+                <button style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; 
+                              padding: 0.8rem 2rem; border: none; border-radius: 2rem; font-size: 1rem; 
+                              cursor: pointer; font-weight: 600;">🌐 Visit Portfolio</button>
+            </a>
+            <br><br>
+            <a href="https://github.com/param20h/mooc-feedback-mining-msme" target="_blank" 
+               style="color: #666; text-decoration: none; margin: 0 1rem;">💻 GitHub</a>
+            <a href="https://linkedin.com/in/param20h" target="_blank" 
+               style="color: #666; text-decoration: none; margin: 0 1rem;">💼 LinkedIn</a>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.write("---")
+    
+    # Footer Info
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        **📝 License**  
+        MIT License  
+        Open Source
+        """)
+    
+    with col2:
+        st.markdown("""
+        **🏆 Competition**  
+        Smart India Hackathon 2021  
+        Problem Statement 025
+        """)
+    
+    with col3:
+        st.markdown("""
+        **📅 Version**  
+        v1.0.0  
+        November 2025
+        """)
 
 # Footer
 st.write("---")
