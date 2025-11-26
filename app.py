@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pickle
+import joblib
 import sys
 import os
 from pathlib import Path
@@ -65,10 +66,10 @@ page = st.sidebar.radio("Go to", ["Home", "Single Review Analysis", "Batch Analy
 def load_models():
     """Load trained models and preprocessing objects"""
     try:
-        with open('models/best_model.pkl', 'rb') as f:
-            model = pickle.load(f)
-        with open('models/vectorizer.pkl', 'rb') as f:
-            vectorizer = pickle.load(f)
+        # Try loading with joblib first (preferred for sklearn models)
+        model = joblib.load('models/optimized_best_model.pkl')
+        vectorizer = joblib.load('models/tfidf_vectorizer.pkl')
+        
         if DataPreprocessor is not None:
             preprocessor = DataPreprocessor()
         else:
@@ -79,6 +80,7 @@ def load_models():
         return None, None, None
     except Exception as e:
         st.error(f"⚠️ Error loading models: {str(e)}")
+        st.info("💡 Tip: Make sure you've run notebook 03 (Model Optimization) to generate the model files.")
         return None, None, None
 
 model, vectorizer, preprocessor = load_models()
@@ -194,10 +196,19 @@ elif page == "Single Review Analysis":
                 prediction = model.predict(features)[0]
                 proba = model.predict_proba(features)[0]
                 
-                # Map prediction
-                sentiment_map = {0: "Negative", 1: "Neutral", 2: "Positive"}
-                sentiment = sentiment_map[prediction]
-                confidence = proba[prediction] * 100
+                # Map prediction (handle both numeric and string labels)
+                sentiment_map = {0: "Negative", 1: "Neutral", 2: "Positive",
+                                "Negative": "Negative", "Neutral": "Neutral", "Positive": "Positive"}
+                sentiment = sentiment_map.get(prediction, str(prediction))
+                
+                # Get confidence based on sentiment
+                if isinstance(prediction, (int, np.integer)):
+                    confidence = proba[prediction] * 100
+                else:
+                    # If string label, find the max probability
+                    sentiment_to_idx = {"Negative": 0, "Neutral": 1, "Positive": 2}
+                    idx = sentiment_to_idx.get(prediction, 0)
+                    confidence = proba[idx] * 100
                 
                 # Display results
                 st.write("---")
@@ -276,9 +287,20 @@ elif page == "Batch Analysis":
                         probabilities = model.predict_proba(features)
                         
                         # Add results to dataframe
-                        sentiment_map = {0: "Negative", 1: "Neutral", 2: "Positive"}
-                        batch_df['sentiment'] = [sentiment_map[p] for p in predictions]
-                        batch_df['confidence'] = [proba[pred] * 100 for pred, proba in zip(predictions, probabilities)]
+                        sentiment_map = {0: "Negative", 1: "Neutral", 2: "Positive",
+                                        "Negative": "Negative", "Neutral": "Neutral", "Positive": "Positive"}
+                        batch_df['sentiment'] = [sentiment_map.get(p, str(p)) for p in predictions]
+                        
+                        # Calculate confidence (handle both numeric and string predictions)
+                        confidences = []
+                        for pred, proba in zip(predictions, probabilities):
+                            if isinstance(pred, (int, np.integer)):
+                                confidences.append(proba[pred] * 100)
+                            else:
+                                sentiment_to_idx = {"Negative": 0, "Neutral": 1, "Positive": 2}
+                                idx = sentiment_to_idx.get(pred, 0)
+                                confidences.append(proba[idx] * 100)
+                        batch_df['confidence'] = confidences
                         
                         # Display results
                         st.write("---")
