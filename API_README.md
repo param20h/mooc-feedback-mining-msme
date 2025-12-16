@@ -152,6 +152,93 @@ Upload CSV file for bulk analysis.
 **Request:**
 ```bash
 curl -X POST "http://localhost:8000/predict/csv" \
+  -F "file=@reviews.csv"
+```
+
+**Response:**
+```json
+{
+  "filename": "reviews.csv",
+  "total_reviews": 100,
+  "csv_data": "CourseId,Review,Label,Sentiment,Confidence\n..."
+}
+```
+
+---
+
+### 5. Model Information
+
+**GET** `/models/info`
+
+Get details about loaded models.
+
+**Request:**
+```bash
+curl http://localhost:8000/models/info
+```
+
+**Response:**
+```json
+{
+  "model_type": "RandomForestClassifier",
+  "vectorizer_type": "TfidfVectorizer",
+  "features": ["excellent", "great", "amazing", "..."],
+  "sentiment_classes": ["Negative", "Neutral", "Positive"]
+}
+```
+
+---
+
+### 6. Download Research Paper
+
+**GET** `/paper/download`
+
+Download the IEEE conference research paper.
+
+**Request:**
+```bash
+curl -O http://localhost:8000/paper/download
+```
+
+Or open in browser: http://localhost:8000/paper/download
+
+**Response:**
+Downloads `MOOC_Sentiment_Analysis_IEEE_Paper.pdf`
+
+---
+
+### 7. Research Paper Information
+
+**GET** `/paper/info`
+
+Get metadata about the research paper.
+
+**Request:**
+```bash
+curl http://localhost:8000/paper/info
+```
+
+**Response:**
+```json
+{
+  "title": "Intelligent Sentiment Analysis of MOOC Reviews: A Deep Learning Approach",
+  "format": "IEEE Conference Paper",
+  "pages": 8,
+  "available": true,
+  "download_url": "/paper/download",
+  "dataset_size": "140,322 reviews",
+  "models_compared": ["Logistic Regression", "Naive Bayes", "Random Forest", "BERT"],
+  "best_accuracy": "87.2% (BERT)"
+}
+```
+
+---
+
+### 4. CSV Upload (Original)
+
+**Request:**
+```bash
+curl -X POST "http://localhost:8000/predict/csv" \
   -F "file=@data/test_reviews.csv"
 ```
 

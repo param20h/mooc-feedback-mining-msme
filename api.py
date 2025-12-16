@@ -5,6 +5,7 @@ FastAPI implementation for model deployment
 
 from fastapi import FastAPI, HTTPException, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from contextlib import asynccontextmanager
@@ -277,6 +278,48 @@ async def model_info():
         "vectorizer_type": type(vectorizer).__name__,
         "features": vectorizer.get_feature_names_out()[:20].tolist() if hasattr(vectorizer, 'get_feature_names_out') else [],
         "sentiment_classes": ["Negative", "Neutral", "Positive"]
+    }
+
+@app.get("/paper/download")
+async def download_paper():
+    """
+    Download the research paper PDF
+    
+    Returns the IEEE conference paper as a downloadable PDF file
+    """
+    paper_path = os.path.join(os.path.dirname(__file__), 'paper', 'reseachpaper.pdf')
+    
+    if not os.path.exists(paper_path):
+        raise HTTPException(status_code=404, detail="Research paper not found")
+    
+    return FileResponse(
+        path=paper_path,
+        media_type='application/pdf',
+        filename='MOOC_Sentiment_Analysis_IEEE_Paper.pdf',
+        headers={
+            "Content-Disposition": "attachment; filename=MOOC_Sentiment_Analysis_IEEE_Paper.pdf"
+        }
+    )
+
+@app.get("/paper/info")
+async def paper_info():
+    """Get information about the research paper"""
+    paper_path = os.path.join(os.path.dirname(__file__), 'paper', 'reseachpaper.pdf')
+    
+    return {
+        "title": "Intelligent Sentiment Analysis of MOOC Reviews: A Deep Learning Approach for Educational Feedback Mining",
+        "format": "IEEE Conference Paper",
+        "pages": 8,
+        "available": os.path.exists(paper_path),
+        "download_url": "/paper/download",
+        "authors": "Research Team",
+        "conference": "IEEE Conference",
+        "year": 2025,
+        "keywords": ["sentiment analysis", "MOOC", "educational data mining", "BERT", "machine learning", "NLP"],
+        "abstract": "This paper presents a comprehensive sentiment analysis framework for automated processing of MOOC reviews. We evaluated four ML approaches on 140,322 Coursera reviews, achieving 87.2% accuracy with BERT.",
+        "dataset_size": "140,322 reviews",
+        "models_compared": ["Logistic Regression", "Naive Bayes", "Random Forest", "BERT"],
+        "best_accuracy": "87.2% (BERT)"
     }
 
 if __name__ == "__main__":

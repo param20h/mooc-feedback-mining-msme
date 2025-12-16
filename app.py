@@ -106,6 +106,40 @@ df = load_data()
 with page[0]:
     st.write("---")
     
+    # Research Paper Download Section
+    st.markdown("### 📄 Research Paper")
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        st.markdown("""
+        <div style="text-align: center; padding: 1.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                    border-radius: 1rem; color: white; margin-bottom: 1rem;">
+            <h4 style="color: white; margin-bottom: 0.5rem;">📑 IEEE Conference Paper</h4>
+            <p style="font-size: 0.95rem; margin-bottom: 0;">
+                "Intelligent Sentiment Analysis of MOOC Reviews"
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Download button
+        try:
+            paper_path = os.path.join(current_dir, 'paper', 'reseachpaper.pdf')
+            with open(paper_path, "rb") as pdf_file:
+                pdf_bytes = pdf_file.read()
+                st.download_button(
+                    label="📥 Download Research Paper (PDF)",
+                    data=pdf_bytes,
+                    file_name="MOOC_Sentiment_Analysis_IEEE_Paper.pdf",
+                    mime="application/pdf",
+                    use_container_width=True,
+                    help="Download the full IEEE conference paper (8 pages)"
+                )
+            st.caption("📊 8 pages | 140K+ reviews | 4 ML models | IEEE format")
+        except FileNotFoundError:
+            st.info("📄 Research paper coming soon!")
+    
+    st.write("---")
+    
     col1, col2, col3 = st.columns(3)
     
     with col1:
@@ -578,6 +612,41 @@ with page[4]:
         📊 87% Accuracy  
         ⏱️ ~500ms inference
         """)
+    
+    st.write("---")
+    
+    # Research Paper Section
+    st.markdown("### 📄 Research Paper")
+    
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        st.markdown("""
+        <div style="text-align: center; padding: 1.5rem; background-color: #e8f4f8; border-radius: 1rem; border: 2px solid #1f77b4;">
+            <h4 style="color: #1f77b4; margin-bottom: 1rem;">📑 IEEE Conference Paper Available</h4>
+            <p style="font-size: 1rem; color: #555; margin-bottom: 1rem;">
+                "Intelligent Sentiment Analysis of MOOC Reviews: A Deep Learning Approach for Educational Feedback Mining"
+            </p>
+            <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">
+                8-page IEEE format paper | 140K+ reviews analyzed | 4 ML models compared
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Download button
+        try:
+            paper_path = os.path.join(current_dir, 'paper', 'reseachpaper.pdf')
+            with open(paper_path, "rb") as pdf_file:
+                pdf_bytes = pdf_file.read()
+                st.download_button(
+                    label="📥 Download Research Paper (PDF)",
+                    data=pdf_bytes,
+                    file_name="MOOC_Sentiment_Analysis_IEEE_Paper.pdf",
+                    mime="application/pdf",
+                    use_container_width=True
+                )
+        except FileNotFoundError:
+            st.info("Research paper will be available soon!")
     
     st.write("---")
     
